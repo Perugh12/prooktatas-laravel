@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  htdocs:
+    # Ha nincs verzió megadva akkor a legutolsó lesz letöltve
+   image: php:apache
+   # Apache-nak ez lesz a fő mappája, mi mappánk és a szerveren lévő mappa
+   volumes:
+     - "./src/:/var/www/html/"
+   ports:
+     - "8080:80"
+     - "4433:443"
+  database:
+    image: mysql:latest
+    # A mysql szervernek ez lesz a fő mappája, mi mappánk és a szerveren lévő mappa
+    volumes:
+      - "./database:/docker-entrypoint-initdb.d/"
+    # MySQL beállítások             
+    environment:
+      MYSQL_DATABASE: docker_php
+      MYSQL_USER: docker_php
+      # MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+  phpmyadmin:
+   image: phpmyadmin/phpmyadmin
+   ports:
+     - "8081:80"
+   environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
