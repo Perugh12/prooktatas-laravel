@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  htdocs: 
+   image: httpd:2.4-alpine
+   networks:
+    - laravel-project
+   container_name: laravel_htdocs
+   volumes:
+     - "./src/:/var/www/html/"
+     - ./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+   ports:
+     - "8080:80"
+   depends_on:
+     - php    
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    networks:
+    - laravel-project
+    container_name: laravel_php
+    volumes:
+      - ./src/:/var/www/html/"
+    ports:
+      - 9000:9000
+    depends_on:
+      - database      
+  database:
+    image: mysql:latest
+    networks:
+    - laravel-project
+    container_name: laravel_database
+    ports:
+      - "4306:3306"
+    environment:
+      MYSQL_DATABASE: laravel_app
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - ./database:/var/lib/mysql    
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+    - laravel-project
+    container_name: laravel_phpmyadmin
+    ports:
+      - "8081:81"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: 1234
+    depends_on:
+      - database
+
+networks:
+  laravel-project:
+     driver: bridge
+      
