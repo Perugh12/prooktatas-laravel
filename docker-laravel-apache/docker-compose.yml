@@ -1,58 +1,71 @@
-version: "3.8"
+version: '3.8'
 services:
-  htdocs: 
-   image: httpd:2.4-alpine
-   networks:
-    - laravel-project
-   container_name: laravel_htdocs
-   volumes:
-     - "./src/:/var/www/html/"
-     - ./docker/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
-   ports:
-     - "8080:80"
-   depends_on:
-     - php    
-  php:
+  webservice:
     build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-    networks:
-    - laravel-project
-    container_name: laravel_php
+      context: ./docker/webservice
+      dockerfile: Dockerfile
+    container_name: laravel_webservice
+    ports: 
+      - 8088:80
     volumes:
-      - ./src/:/var/www/html/"
-    ports:
-      - 9000:9000
-    depends_on:
-      - database      
+      - ./src:/var/www/html
+    networks:
+      - laravel_network
   database:
     image: mysql:latest
-    networks:
-    - laravel-project
     container_name: laravel_database
     ports:
       - "4306:3306"
-    environment:
-      MYSQL_DATABASE: laravel_app
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: 1234
-      MYSQL_ROOT_PASSWORD: 1234
     volumes:
-      - ./database:/var/lib/mysql    
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    networks:
-    - laravel-project
-    container_name: laravel_phpmyadmin
-    ports:
-      - "8081:81"
+      - ./database:/var/lib/mysql
     environment:
-      PMA_HOST: database
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_password
       MYSQL_ROOT_PASSWORD: 1234
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    restart: unless-stopped
+    tty: true
+    networks:
+      - laravel_network
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: laravel_php
+    volumes: 
+      - ./src:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel_network
+  artisan:
+    build:
+      context: ./docker/artisan
+      dockerfile: Dockerfile
+    container_name: laravel_artisan
+    volumes: 
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['php', '/var/www/html/artisan']
     depends_on:
       - database
-
+    networks:
+      - laravel_network
+  npm:
+    image: node:20-alpine
+    container_name: laravel_npm
+    volumes: 
+      - ./src:/var/www/html
+    ports: 
+      - "3000:3000"
+      - "3001:3001"
+      - "5173:5173"
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - laravel_network
 networks:
-  laravel-project:
-     driver: bridge
-      
+  laravel_network:
+    driver: bridge

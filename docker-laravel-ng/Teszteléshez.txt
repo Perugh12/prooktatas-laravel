@@ -1,0 +1,6 @@
+
+docker compose build
+docker compose up -d
+
+// docker compose exec [servicename = php] [container CMD = php /var/www/html/artisan migrate]
+docker compose exec php php /var/www/html/artisan migrate
