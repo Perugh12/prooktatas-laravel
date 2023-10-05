@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->string('company')->nullable();
             $table->string('country');
             $table->string('state');
@@ -26,9 +28,7 @@ return new class extends Migration
             $table->string('house_number'); // 1
             $table->string('building_number')->nullable(); // A
             $table->string('floor_number')->nullable(); // 1
-            $table->string('apartment_number')->nullable(); // 1
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
+            $table->string('apartment_number')->nullable(); // 1            
             $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
