@@ -19,9 +19,9 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => fake()->numberBetween(1, 100),
-            'status' => fake()->randomElement(['pedding', 'processing', 'completed', 'decline']),
-            'payment_method' => fake()->randomElement(['cash', 'card', 'paypal']),
-            'shipping_method' => fake()->randomElement(['post', 'delivery', 'pickup']),
+            'status' => fake()->randomElement(['pedding', 'completed', 'canceled']),
+            'payment_method' => fake()->randomElement(['cash', 'card']),
+            'shipping_method' => fake()->randomElement(['delivery', 'pickup']),
 
             'payment_firstname' => fake()->firstName(),
             'payment_lastname' => fake()->lastName(),
@@ -53,11 +53,7 @@ class OrderFactory extends Factory
             'shipping_house_number' => fake()->buildingNumber(),
             'shipping_building_number' => fake()->buildingNumber(),
             'shipping_floor_number' => fake()->buildingNumber(),
-            'shipping_apartment_number' => fake()->buildingNumber()            
+            'shipping_apartment_number' => fake()->buildingNumber()
         ];
     }
 }
-
-?>
-
-<?php if?>

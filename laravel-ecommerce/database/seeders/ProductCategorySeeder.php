@@ -12,6 +12,16 @@ class ProductCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        ProductCategory::factory(10)->create();
+        // ProductCategory::factory(2)->create();
+
+        ProductCategory::factory()->create([
+            'name' => 'Laptop',
+            'slug' => 'laptopok',
+        ]);
+
+        ProductCategory::factory()->create([
+            'name' => 'Irodai szék',
+            'slug' => 'irodai-szek',
+        ]);
     }
 }

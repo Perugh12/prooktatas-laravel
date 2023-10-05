@@ -20,7 +20,7 @@ class OrderProductFactory extends Factory
             'order_id' => fake()->numberBetween(1, 100),
             'product_id' => fake()->numberBetween(1, 100),
             'quantity' => fake()->numberBetween(1, 100),
-            'unit_price' => fake()->numberBetween(1, 100),
+            'unit_price' => fake()->ramdomFloat(2, 1, 1000),
         ];
-    }   
+    }
 }

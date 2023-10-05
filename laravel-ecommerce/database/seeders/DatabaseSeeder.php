@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\OrderSeeder;
+use Database\Seeders\ProductSeeder;
+use Database\Seeders\UserAddressSeeder;
+use Database\Seeders\OrderProductSeeder;
+use Database\Seeders\ProductCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        # Itt meg lehet neki addni, hogy melyik seeder-t futtassa le, akár az összeset
+        // $this->call(UserSeeder::class);
+        // $this->call(UserAddressSeeder::class);
+        $this->call(ProductCategorySeeder::class);
+        $this->call(ProductSeeder::class);
+        // $this->call(OrderSeeder::class);
+        // $this->call(OrderProductSeeder::class);    
     }
 }

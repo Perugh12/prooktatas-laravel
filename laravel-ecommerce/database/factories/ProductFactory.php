@@ -22,7 +22,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'image' => fake()->imageUrl(),
             'stock' => fake()->numberBetween(1, 100),
-            'unit_price' => fake()->numberBetween(1, 100)
+            'unit_price' => fake()->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = NULL)
         ];
     }
 }

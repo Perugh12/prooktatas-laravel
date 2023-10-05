@@ -9,14 +9,15 @@ class InstallController extends Controller
 {
     public function index()
     {
-        # Migrálja az adatbázisokat első telepítéskor
-        $dbConnectionStatus = $this->checkDatabaseConnection();
+        $dbConnectionStatus = false;
         $migrationStatus = false;
         $seederStatus = false;
 
-        # Ha van kapcsolat akkor mehet a migráció
-        if ($dbConnectionStatus) {
-            $migrationStatus = $this->runMigrations();
+        # Migrálja az adatbázisokat első telepítéskor
+        $migrationStatus = $this->runMigrations();
+
+        if ($migrationStatus) {
+            $dbConnectionStatus = $this->checkDatabaseConnection();
         }
 
         # Ha sikeres a migráció akkor mehet a seeder
@@ -54,7 +55,10 @@ class InstallController extends Controller
     private function runSeeders()
     {
         try {
-            Artisan::call('db:seed');
+            Artisan::call('db:seed', [
+                '--class' => 'DatabaseSeeder',
+                '--force' => 'true' # Éles rendszer esetén is fusson le
+            ]);
             return true;
         } catch (\Exception $e) {
             return false;
