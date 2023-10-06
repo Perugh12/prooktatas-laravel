@@ -16,7 +16,7 @@ class ProductController extends Controller
         # Adatbázis lekérés, lekéri a termékeket
         $products = Product::where('stock', '>', 0)->get();
 
-        return view('products.index', [
+        return view('public.product.list', [
             'products' => $products
         ]);
     }
