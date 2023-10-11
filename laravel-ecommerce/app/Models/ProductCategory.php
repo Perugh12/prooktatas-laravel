@@ -18,4 +18,10 @@ class ProductCategory extends Model
         'name',
         'slug'
     ];
+
+    # Össze kell kapcsolni a termékekkel akkor mennek csak az adatbázis lekérések
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -16,4 +16,4 @@ use App\Http\Controllers\ProductController;
 
 Route::get('/', [ProductController::class, 'list']);
 
-Route::get('/product/list', [ProductController::class, 'list'])->name('products.list');
+Route::get('/product/list/{category}', [ProductController::class, 'list'])->name('products.list');
