@@ -15,9 +15,10 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('wishlist') }}">
+                    <li class="nav-item me-2">
+                        <a class="nav-link position-relative" href="{{ route('wishlist') }}">
                             <i class="fas fa-heart"></i>
+                            <span class="wishlist-count position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -39,6 +40,14 @@
         .then(response => {
             console.log(response.data);
             document.querySelector('.cart-count').innerHTML = response.data.count;
+        }).catch(error => {
+            console.log(error);
+        });
+
+        window.axios.get('{{route('wishlist.count')}}',)
+        .then(response => {
+            console.log(response.data);
+            document.querySelector('.wishlist-count').innerHTML = response.data.count;
         }).catch(error => {
             console.log(error);
         });

@@ -62,6 +62,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const addToCartButtons = document.querySelectorAll('.add-product-to-cart');
+        const addToWishlistButtons = document.querySelectorAll('.add-product-to-wishlist');
 
         addToCartButtons.forEach(button => {
             button.addEventListener('click', (event) => {
@@ -77,7 +78,25 @@
                     console.log(response.data);
                 }).catch(error => {
                     console.log(error);
-                });
+                });                
+            });
+        });
+
+        addToWishlistButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const productId = event.target.dataset.product_id;
+                const quantity = 1;
+
+                window.axios.post('{{route('wishlist.add')}}', {
+                    product_id: productId,
+                    quantity: quantity
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+                    console.log(error);
+                });             
             });
         });
 
