@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\InstallController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +20,14 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/', [HomeController::class, 'index']);
 Route::get('/install', [InstallController::class, 'index']);
+
+// Chart api calls /api/cart/count, /api/cart/add, /api/cart/update, /api/cart/remove/1/1
+Route::controller(CartController::class)->group(function () {
+    Route::prefix('cart')->group(function () {
+        Route::get('/count', 'count')->name('cart.count');
+        Route::post('/add', 'add')->name('cart.add');
+        Route::put('/update', 'update')->name('cart.update');
+        Route::delete('/remove/{id}/{quantiy}', 'remove')->name('cart.remove');
+    });
+});

@@ -8,13 +8,40 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link @if($page == 'products') active @endif" href="#">Termékek</a>
+                        <a class="nav-link @if($page == 'products') active @endif" href="{{ route('product.list', 'osszes-termek') }}">Termékek</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if($page == 'contact') active @endif" href="#">Kapcsolat</a>
+                        <a class="nav-link @if($page == 'contact') active @endif" href="{{ route('contact') }}">Kapcsolat</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('wishlist') }}">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{{ route('cart') }}">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                        </a>                       
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.axios.get('{{route('cart.count')}}',)
+        .then(response => {
+            console.log(response.data);
+            document.querySelector('.cart-count').innerHTML = response.data.count;
+        }).catch(error => {
+            console.log(error);
+        });
+    });
+</script>
+@endpush
