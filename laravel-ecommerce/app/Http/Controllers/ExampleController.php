@@ -38,9 +38,9 @@ class ExampleController extends Controller
     function remove(Request $request) {
         if (!isset($this->list[$request->id])) {
             return response()->json([
-            'list' => implode(', ', $this->list),                   
-            'msg' => "Elem nem található. ($request->id)"
-        ]);
+                'list' => implode(', ', $this->list),                   
+                'msg' => "Elem nem található. ($request->id)"
+            ]);
         }
 
         $item = $this->list[$request->id];

@@ -23,11 +23,9 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <div class="checkout-btn-wrapper text-end">
-            <!-- <a href="{{ route('product.list', 'osszes-termek') }}" class="btn btn-secondary">Vásárlás folytatása</a>
-            <a href="{{ route('checkout') }}" class="btn btn-primary">Fizetés</a> -->
-            <a href="">Kosárba</a>
-            <a href="">Töröl</a>
+        <div class="checkout-btn-wrapper text-end">          
+            <a href="" class="btn btn-primary">Kosárba</a>
+            <a href="" class="btn btn-danger">Töröl</a>
         </div>
     </div>
 </div>

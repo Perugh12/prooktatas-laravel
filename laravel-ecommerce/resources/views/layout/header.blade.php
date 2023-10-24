@@ -18,13 +18,13 @@
                     <li class="nav-item me-2">
                         <a class="nav-link position-relative" href="{{ route('wishlist') }}">
                             <i class="fas fa-heart"></i>
-                            <span class="wishlist-count position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                            <span class="wishlist-count-wrapper position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="{{ route('cart') }}">
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                            <span class="cart-count-wrapper position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger"></span>
                         </a>                       
                     </li>
                 </ul>
@@ -36,21 +36,14 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        window.axios.get('{{route('cart.count')}}',)
-        .then(response => {
-            console.log(response.data);
-            document.querySelector('.cart-count').innerHTML = response.data.count;
-        }).catch(error => {
-            console.log(error);
-        });
+        window.refreshCartCount();
 
-        window.axios.get('{{route('wishlist.count')}}',)
+        /*window.axios.get('{{route('wishlist.count')}}',)
         .then(response => {
-            console.log(response.data);
             document.querySelector('.wishlist-count').innerHTML = response.data.count;
         }).catch(error => {
             console.log(error);
-        });
+        });*/
     });
 </script>
 @endpush

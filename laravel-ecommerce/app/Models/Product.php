@@ -28,4 +28,9 @@ class Product extends Model
     {
         return $this->belongsTo(ProductCategory::class);
     }
+
+    public function unitPrice()
+    {
+        return number_format($this->unit_price, 0, ',', '.');
+    }
 }
