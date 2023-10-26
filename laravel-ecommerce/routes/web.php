@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ExampleController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -25,9 +26,8 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 
 Route::get('/wishlist' , [WishlistController::class, 'index'])->name('wishlist');
 
-Route::get('/checkout', function ()  {
-    return 'checkout';
-})->name('checkout');
+Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
+
 Route::get('/contact', function ()  {
     return 'contact';
 })->name('contact');

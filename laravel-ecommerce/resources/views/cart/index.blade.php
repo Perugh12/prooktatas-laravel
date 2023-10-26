@@ -17,8 +17,8 @@
                     <div class="row">        
                         <hr>
                         @if($cart_products->count())
-                        @foreach($cart_products as $cart_product)
-                            <div class="row">
+                        @foreach($cart_products as $index => $cart_product)
+                            <div id="cart-product-row-{{$index}}" class="row">
                                 <div class="col-12">
                                    <div class="cart-product-wapper">
                                     <div class="row mb-2">
@@ -28,8 +28,8 @@
                                                 @if(str_contains($cart_product->product->image, 'http')) 
                                                     {{$cart_product->product->image}} 
                                                 @else 
-                                                    {{Vite::asset('resources/images/{$cart_product->product->image}')}}
-                                                 @endif" alt="{{ $cart_product->product->name }}" class="w-100">
+                                                    {{Vite::asset('resources/images/'.$cart_product->product->image)}}
+                                                 @endif" alt="{{ $cart_product->product->name }}" alt="" class="w-100">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6 d-flex flex-column justify-content-center align-items-center align-items-lg-start mb-2 mb-lg-0">
@@ -42,24 +42,24 @@
                                         <div class="col-12 col-lg-2 d-flex flex-row justify-content-center align-items-center mb-2 mb-lg-0">
                                             <div class="cart-product-actions">
                                                 <div class="input-group mb-3">
-                                                    <button class="btn btn-outline-secondary change-quantity-btn" type="button" data-product-id="{{ $cart_product->product_id }}" data-change="decrease">-</button>
-                                                    <input type="text" class="form-control text-center" value="{{ $cart_product->quantity }}" readonly>
-                                                    <button class="btn btn-outline-secondary change-quantity-btn" type="button" data-product-id="{{ $cart_product->product_id }}" data-change="increase">+</button>
+                                                    <button class="btn btn-outline-secondary change-quantity-btn" type="button" data-cart-product-id="{{ $cart_product->id }}" data-change="decrease" data-index="{{$index}}">-</button>
+                                                    <input type="text" class="form-control text-center change-quantity-input" value="{{ $cart_product->quantity }}" min="1" step="1" data-index="{{$index}}" data-product-id="{{ $cart_product->id }}">
+                                                    <button class="btn btn-outline-secondary change-quantity-btn" type="button" data-cart-product-id="{{ $cart_product->id }}" data-change="increase" data-index="{{$index}}">+</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-1 d-flex flex-row justify-content-center align-items-center mb-2 mb-lg-0">
                                             <div class="cart-product-actions">
-                                                <a href="javascript:;" class="remove-product-from-cart" data-product-id="{{ $cart_product->product_id }}">
-                                                    <i class="fas fa-trash-alt" data-product-id="{{ $cart_product->product_id }}"></i>
+                                                <a href="javascript:;" class="btn btn-secondary remove-product-from-cart" data-cart-product-id="{{ $cart_product->id }}" data-index="{{$index}}">
+                                                    <i class="fas fa-trash-alt" data-cart-product-id="{{ $cart_product->id }}" data-index="{{$index}}"></i>
                                                 </a>
                                             </div>
                                         </div>                                   
                                     </div>
                                    </div>
                                 </div>
-                            </div>
-                            <hr>
+                                <hr>
+                            </div>                           
                         @endforeach
                         @else
                         <div class="row">
@@ -90,6 +90,80 @@
 
 @push('scripts')
 <script>
+    const changeQuantityBtns = document.querySelectorAll('.change-quantity-btn');
+    const removeProductFromCartBtns = document.querySelectorAll('.remove-product-from-cart');
+    const changeQuantityInputs = document.querySelectorAll('.change-quantity-input');
+
+    function changeQuantity(cartProductId, change, quantity, index){
+        axios.patch("{{route('cart.change-quantity')}}", {
+                cart_product_id: cartProductId,
+                change: change,
+                quantity: quantity
+            })
+            .then(function (response) {
+                window.swal.fire({
+                    text: response.data.message,
+                    icon: response.data.status,                                        
+                    position: "top-end",
+                    showConfirmButton: false,
+                    toast: true,
+                    timer: 1500,
+                    showCloseButton: true
+                })
+
+                if (response.data.status == 'success') {
+                    changeQuantityInputs[index].value = response.data.new_quantity
+                }
+            })                 
+    }
+
+    function deleteProductFromCart(cartProductId, index){
+        axios.delete(`{{route('cart.remove', '')}}/${cartProductId}`, {})
+            .then(function (response) {
+                window.swal.fire({
+                     text: response.data.message,
+                    icon: response.data.status,                                         
+                    position: "top-end",
+                    showConfirmButton: false,
+                    toast: true,
+                    timer: 1500,
+                    showCloseButton: true
+                })
+            })  
+
+        document.getElementById(`cart-product-row-${index}`).remove()
+    }
+
+    changeQuantityBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const cartProductId = parseInt(e.target.dataset.cartProductId)
+            const change = e.target.dataset.change
+            const quantity = 1            
+            const index = parseInt(e.target.dataset.index)
+            
+            changeQuantity(cartProductId, change, quantity, index)
+        })
+    })
+
+    removeProductFromCartBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const cartProductId = parseInt(e.target.dataset.cartProductId)
+            const index = parseInt(e.target.dataset.index)
+            
+            deleteProductFromCart(cartProductId, index)
+        })
+    })
+
+    changeQuantityInputs.forEach(input => {
+        input.addEventListener('keyup', (e) => {
+            const cartProductId = parseInt(e.target.dataset.cartProductId)
+            const change = 'change'
+            const quantity = parseInt(e.target.value)
+            const index = parseInt(e.target.dataset.index)
+            
+            changeQuantity(cartProductId, change, quantity, index)
+        })
+    })
 </script>
 @endpush
 

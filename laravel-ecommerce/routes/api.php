@@ -29,8 +29,8 @@ Route::controller(CartController::class)->group(function () {
     Route::prefix('cart')->group(function () {
         Route::get('/count', 'count')->name('cart.count');
         Route::post('/add', 'add')->name('cart.add');
-        Route::put('/update', 'update')->name('cart.update');
-        Route::delete('/remove/{id}/{quantiy}', 'remove')->name('cart.remove');
+        Route::patch('/change-quantity', 'changeQuantity')->name('cart.change-quantity');
+        Route::delete('/remove/{id}', 'remove')->name('cart.remove');
     });
 });
 

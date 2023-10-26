@@ -84,7 +84,8 @@
                     title: 'Hiba történt!',
                     showConfirmButton: false,
                     toast: true,
-                    timer: 1500
+                    timer: 1500,
+                    showCloseButton: true
                 });
                 
             }
@@ -97,7 +98,8 @@
                 title: 'Hiba történt!',
                 showConfirmButton: false,
                 toast: true,
-                timer: 1500
+                timer: 1500,
+                showCloseButton: true
             });
         })
     }
@@ -111,44 +113,7 @@
 
                 addProductToCart(event.target.dataset.product_id, 1);
             });
-        });
-
-        /*const addToCartButtons = document.querySelectorAll('.add-product-to-cart');
-        const addToWishlistButtons = document.querySelectorAll('.add-product-to-wishlist');
-
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
-
-                const productId = event.target.dataset.product_id;
-                const quantity = 1;
-
-                window.axios.post('{{route('cart.add')}}', {
-                    product_id: productId,
-                    quantity: quantity
-                }).then(response => {
-                    console.log(response.data);
-                }).catch(error => {
-                    console.log(error);
-                });                
-            });
-        });
-
-        addToWishlistButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
-
-                const productId = event.target.dataset.product_id;
-
-                window.axios.post('{{route('wishlist.add')}}', {
-                    product_id: productId,
-                }).then(response => {
-                    console.log(response.data);
-                }).catch(error => {
-                    console.log(error);
-                });             
-            });
-        });*/
+        });        
     });
 </script>
 @endpush
