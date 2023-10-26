@@ -14,7 +14,7 @@ class CartController extends Controller
     {
         $cartProducts = CartProduct::whereHas('cart', function ($query) {
             $query->where('session_token', request()->session()->token());
-        })->orderBy('created_at', 'desc')->get();
+        })->get();
 
         $cartProducts->transform(function ($cartProduct) {
             $cartProduct->total_price = $cartProduct->totalPrice();

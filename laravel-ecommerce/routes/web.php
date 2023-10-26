@@ -27,6 +27,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('/wishlist' , [WishlistController::class, 'index'])->name('wishlist');
 
 Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
+Route::post('/checkout', [OrderController::class, 'order'])->name('order');
 
 Route::get('/contact', function ()  {
     return 'contact';
