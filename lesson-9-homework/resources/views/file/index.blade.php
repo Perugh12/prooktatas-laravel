@@ -27,12 +27,12 @@
 <body>
     <div id="app">
 
-        <div class="container">
+        <div class="container p-5 w-25">
 
             <div class="panel panel-primary">
 
                 <div class="panel-heading">
-                    <h2>Laravel 10 File Upload Example - ItSolutionStuff.com</h2>
+                    <h2>File Upload</h2>
                 </div>
 
                 <div class="panel-body">
