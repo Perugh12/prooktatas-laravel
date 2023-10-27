@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ExampleController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Http\Request;
@@ -34,6 +35,19 @@ Route::controller(CartController::class)->group(function () {
     });
 });
 
+Route::controller(OrderController::class)->group(function () {
+    Route::prefix('order')->group(function () {
+        Route::post('/billing-address', 'billingAddressStore')->name('order.billing.address.store');
+        Route::post('/shipping-address', 'shippingAddressStore')->name('order.shipping.address.store');
+        Route::post('/payment-method', 'paymentMethodStore')->name('order.payment.method.store');
+        Route::post('/shipping-method', 'shipmentMethodStore')->name('order.shipment.method.store');
+        Route::get('/summary', 'summary')->name('order.summary');
+        Route::get('/products', 'products')->name('order.products');
+        Route::post('/store', 'store')->name('order.store');
+    });
+});
+
+
 Route::controller(WishlistController::class)->group(function () {
     Route::prefix('wishlist')->group(function () {
         Route::get('/count', 'count')->name('wishlist.count');
@@ -43,11 +57,13 @@ Route::controller(WishlistController::class)->group(function () {
     });
 });
 
-Route::controller(ExampleController::class)->group(function () {
+
+
+/*Route::controller(ExampleController::class)->group(function () {
     Route::prefix('example')->group(function () {
-        Route::get('/list', 'list')->name('example.list');       
+        Route::get('/list', 'list')->name('example.list');
         Route::put('/add', 'add')->name('example.add');
         Route::patch('/update', 'update')->name('example.update');
-        Route::delete('/remove', 'remove')->name('example.remove');        
+        Route::delete('/remove', 'remove')->name('example.remove');
     });
-});
+});*/

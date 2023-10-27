@@ -24,13 +24,14 @@ Route::get('/product/list/{category}', [ProductController::class, 'list'])->name
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 
-Route::get('/wishlist' , [WishlistController::class, 'index'])->name('wishlist');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
 
 Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
-Route::post('/checkout', [OrderController::class, 'order'])->name('order');
 
-Route::get('/contact', function ()  {
+Route::get('/order/end', [OrderController::class, 'end'])->name('order.end');
+
+Route::get('/contact', function () {
     return 'contact';
 })->name('contact');
 
-Route::get('/example' , [ExampleController::class, 'index'])->name('example');
+Route::get('/example', [ExampleController::class, 'index'])->name('example');

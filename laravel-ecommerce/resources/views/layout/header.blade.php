@@ -1,3 +1,4 @@
+@php if(!isset($page)) $page = ''; @endphp
 <header class="mb-2 border">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">

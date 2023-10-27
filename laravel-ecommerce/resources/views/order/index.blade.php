@@ -1,53 +1,96 @@
-<!DOCTYPE html>
-<html lang="hu" class="h-100">
+@extends('layout.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products | {{ config('app.name') }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/app.css')}}">
+@section('content')
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="accordion" id="order-accordion">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @stack('style')
-</head>
-
-<body class="h-100">
-    <div class="container h-100">
-        <div class="row h-100">
-            <div class="col-12 h-100">
-                @include('layout.header')              
-               
-               <form action="" method="post">
-                    @csrf
-
-                    @include('order.account')
-                    @include('order.billing_address')
-                    @include('order.shipment_address')
-                    @include('order.shipment_method')
-                    @include('order.payment_method')
-                    @include('order.summary')
-                </form>
-                 @include('layout.footer')
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-account">
+                        Fiók
+                    </button>
+                </h2>
+                <div id="panel-account" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        @include('order.account')
+                    </div>
+                </div>
             </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-billing-address">
+                        Számlázási cím
+                    </button>
+                </h2>
+                <div id="panel-billing-address" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @include('order.billing_address')
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-shipping-address">
+                        Szállítási cím
+                    </button>
+                </h2>
+                <div id="panel-shipping-address" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @include('order.shipping_address')
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-shipment-method">
+                        Szállítási mód
+                    </button>
+                </h2>
+                <div id="panel-shipment-method" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @include('order.shipment_method')
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-payment-method">
+                        Fizetési mód
+                    </button>
+                </h2>
+                <div id="panel-payment-method" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @include('order.payment_method')
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-summary">
+                        Összegzés
+                    </button>
+                </h2>
+                <div id="panel-summary" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @include('order.summary')
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    @stack('scripts')
-    <script>
-        window.refreshCartCount = function(){
-             window.axios.get('{{route('cart.count')}}').then(response => {
-                if (typeof response.data.count !== 'undefined' && response.data.count) {
-                    document.querySelector('.cart-count-wrapper').innerHTML = response.data.count;    
-                }else {
-                    document.querySelector('.cart-count-wrapper').innerHTML = 0;
-                }
-                
-            })
-        }
-    </script>
-</body>
+    <div class="col-12 col-lg-4">
+        <h2 class="accordion-header text-center">Termékek</h2>
+        @include('order.products')
+    </div>
 
-</html>
+</div>
+
+@endsection
