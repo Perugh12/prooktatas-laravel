@@ -59,7 +59,7 @@
         window.axios.post("{{route('order.store')}}")
             .then(function(response) {
                 if (response.data.success) {
-                    window.location.href = "{{route('order.end')}}";
+                    window.location.href = "{{route('order.end', '')}}/" + response.data.order_id;
                 }
             })
     }
