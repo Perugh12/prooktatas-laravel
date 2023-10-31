@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\WishlistController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +44,19 @@ Route::controller(OrderController::class)->group(function () {
         Route::get('/summary', 'summary')->name('order.summary');
         Route::get('/products', 'products')->name('order.products');
         Route::post('/store', 'store')->name('order.store');
+    });
+});
+
+Route::prefix('admin')->group(function () {
+    Route::controller(AdminAuthController::class)->group(function () {
+        Route::get('/login', 'login')->name('admin.login');
+        //   Route::get('/logout', 'logout')->name('admin.logout');
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::controller(AdminOrderController::class)->group(function () {
+            Route::get('/orders', 'index')->name('admin.orders');
+        });
     });
 });
 
