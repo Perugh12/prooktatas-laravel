@@ -7,6 +7,7 @@ use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,18 +45,26 @@ Route::controller(OrderController::class)->group(function () {
         Route::get('/summary', 'summary')->name('order.summary');
         Route::get('/products', 'products')->name('order.products');
         Route::post('/store', 'store')->name('order.store');
+        // Route::delete('/product-remove/{id}', 'remove')->name('order.remove');
+        Route::delete('/remove/{id}', 'remove')->name('order.remove');
     });
 });
 
 Route::prefix('admin')->group(function () {
     Route::controller(AdminAuthController::class)->group(function () {
         Route::get('/login', 'login')->name('admin.login');
-        //   Route::get('/logout', 'logout')->name('admin.logout');
+        Route::get('/logout', 'logout')->name('admin.logout');
     });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(AdminOrderController::class)->group(function () {
             Route::get('/orders', 'index')->name('admin.orders');
+        });
+
+        Route::controller(AdminProfileController::class)->group(function () {
+            Route::get('/profile', 'show')->name('admin.profile.show');
+            Route::patch('/profile', 'update')->name('admin.profile.update');
+            Route::delete('/profile', 'delete')->name('admin.profile.delete');
         });
     });
 });

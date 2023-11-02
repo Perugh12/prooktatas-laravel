@@ -15,6 +15,8 @@ class OrderController extends Controller
 {
     public function index()
     {
+        request()->session()->forget('order');
+
         if (!$this->issetOrder()) {
             $this->createOrder();
         }
@@ -56,9 +58,25 @@ class OrderController extends Controller
             ],
         ];
 
+        $orderProducts = request()->session()->get('order')['products'];
+
+        $orderProducts = $orderProducts->map(function ($orderProduct) {
+            return [
+                'id' => $orderProduct->product->id,
+                'name' => $orderProduct->product->name,
+                'image' => $orderProduct->product->image,
+                'description' => $orderProduct->product->description,
+                'quantity' => $orderProduct->quantity,
+                'total_price' => $orderProduct->quantity * $orderProduct->unit_price,
+            ];
+        });
+
+
+
         return view('order.index', [
             'page' => 'order',
             'test' => $test,
+            'order_products' => $orderProducts,
         ]);
     }
 
@@ -392,5 +410,43 @@ class OrderController extends Controller
         $order = request()->session()->get('order');
         $order['order'] = request()->all();
         request()->session()->put('order', $order);
+    }
+
+    public function remove($id)
+    {
+        $validator = Validator::make(['id' => $id], [
+            'id' => ['required', 'integer', 'min:1'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $product = Product::where('id', $id)->first();
+        $order = request()->session()->get('order');
+
+
+        $product->stock = $product->stock + $order['products']->where('product_id', $id)->first()->quantity;
+        $product->save();
+
+        $order['products'] = $order['products']->filter(function ($orderProduct) use ($id) {
+            return $orderProduct->product_id != $id;
+        });
+
+        # Van-e még a kosárban elem?
+        if ($order['products']->count() == 0) {
+            request()->session()->forget('order');
+            return response()->json([
+                'success' => 'success',
+                'session' => null,
+            ], 200);
+        }
+
+        request()->session()->put('order', $order);
+
+        return response()->json([
+            'success' => 'success',
+            'session' => request()->session()->get('order'),
+        ], 200);
     }
 }

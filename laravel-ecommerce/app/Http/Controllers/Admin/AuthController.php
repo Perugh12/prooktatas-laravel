@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Controller;
+use App\Http\Controllers\Admin\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     public function login(Request $request): JsonResponse
     {
@@ -23,8 +23,16 @@ class AuthController extends Controller
         return $this->sendError('Unauthorized.', ['error' => 'Unauthorized'], 401);
     }
 
-    public function logout()
+    public function logout(Request $request): JsonResponse
     {
+        if (auth()->check()) {
+            auth()->user()->tokens()->delete();
+        }
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return $this->sendResponse([], 'User logout successfully.');
     }
 
     public function refresh()
